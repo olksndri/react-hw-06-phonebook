@@ -1,7 +1,18 @@
 import css from '../styles/app.module.css';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteContact } from 'redux/contactsSlice';
+import { getContacts, getSearchFilter} from 'redux/selectors';
 
-export const ContactList = ({ onDelete, contacts, filter }) => { 
+
+export const ContactList = () => { 
+    const contacts = useSelector(getContacts); 
+    const filter = useSelector(getSearchFilter); 
+    const dispatch = useDispatch(); 
+
+    const onDelete = (evt) => {
+        dispatch(deleteContact(evt.target.id));
+    }
+
     return (
         <>
             <ul className={css['contacts-list']}>
@@ -10,25 +21,19 @@ export const ContactList = ({ onDelete, contacts, filter }) => {
                         return (
                             <li key={el.id} className={css['contacts-list-item']}>
                                 <span>{el.name}: {el.number}</span>
-                                <button type="button" onClick={onDelete} key={el.id}>Delete</button>
+                                <button type="button" onClick={onDelete} id={el.id}>Delete</button>
                             </li>
                         )}) : 
                 contacts.map(el => {
-                    if (el.name.toLowerCase().includes(filter.toLowerCase())) {
+                    if (el.name.toLowerCase().includes(filter.toLowerCase().trim())) {
                         return (
                             <li key={el.id} className={css['contacts-list-item']}>
                                 <span>{el.name}: {el.number}</span>
-                                <button type="button" onClick={onDelete} key={el.id}>Delete</button>
+                                <button type="button" onClick={onDelete} id={el.id}>Delete</button>
                             </li>)
                     } return <></>; 
                 })}
             </ul>
         </>
     )
-}
-
-ContactList.propTypes = { 
-    onDelete: PropTypes.func.isRequired,
-    contacts: PropTypes.array.isRequired,
-    filter: PropTypes.string
 }

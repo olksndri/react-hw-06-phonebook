@@ -1,17 +1,22 @@
-import PropTypes from 'prop-types';
+import { nanoid } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import { setSearchFilter } from 'redux/filterSlice';
 
-export const Filter = ({ onInput, filterId }) => { 
-    const { filter, setFilter } = onInput; 
+export const Filter = () => { 
+    const filterId = nanoid(); 
+    const dispatch = useDispatch(); 
+
+    const onInput = (evt) => {
+        const value = evt.target.value; 
+        dispatch(setSearchFilter(value)); 
+        
+    }
 
     return ( 
         <>
             <label htmlFor={filterId}>Search contacts by name</label>
-            <input type="text" id={filterId} onInput={(evt) => setFilter(evt.target.value)} value={filter}/>
+            <input type="text" id={filterId} onInput={onInput}/>
         </>
     )
 }
 
-Filter.propTypes = { 
-    onInput: PropTypes.object.isRequired,
-    filterId: PropTypes.string, 
-}

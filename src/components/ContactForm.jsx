@@ -1,8 +1,10 @@
+import { nanoid } from '@reduxjs/toolkit';
 import css from '../styles/app.module.css';
 import PropTypes from 'prop-types';
 
-export const ContactForm = ({ onSubmit, onInput, textId, numberId}) => { 
-    const { name, setName, number, setNumber } = onInput; 
+export const ContactForm = ({ onSubmit }) => { 
+    const textId = nanoid();
+    const numberId = nanoid();
 
     return ( 
         <form onSubmit={onSubmit} className={css.form}>
@@ -10,22 +12,18 @@ export const ContactForm = ({ onSubmit, onInput, textId, numberId}) => {
         <input
         type="text"
         name="name"
-        onInput={(evt) => setName(evt.target.value)}
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
         id={textId}
-        value={name}
         required
         />
         <label htmlFor={numberId}>Number</label>
         <input
         type="tel"
         name="number"
-        onInput={(evt) => setNumber(evt.target.value)}
         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         id={numberId}
-        value={number}
         required
         />  
         <button type="submit">Add contact</button>
@@ -35,7 +33,4 @@ export const ContactForm = ({ onSubmit, onInput, textId, numberId}) => {
 
 ContactForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    onInput: PropTypes.object.isRequired,
-    textId: PropTypes.string,
-    numberId: PropTypes.string,
 }
